@@ -1,5 +1,6 @@
 const Verification = require('../utils/verification');
 const { User } = require('../../models');
+// const sendMail = require('../utils/mailer'); // 引入 Mailgun 邮件工具
 
 // 注册验证码发送
 exports.sendRegistrationCode = async (req, res) => {
@@ -16,7 +17,11 @@ exports.sendRegistrationCode = async (req, res) => {
     const code = await Verification.create(user.id, 'register');
     console.log(`Registration code for ${email}: ${code}`); // 模拟发送
 
-    res.status(200).json({ message: 'Registration code sent.' });
+    // 使用 Mailgun 发送验证码
+   await sendMail(email, 'Your Registration Code', `Your verification code is: ${code}`);
+
+
+    res.status(200).json({ message: 'Registration code sent to your email.' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
