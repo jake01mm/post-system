@@ -25,7 +25,7 @@ exports.register = async (req, res) => { // 异步函数处理请求和响应 //
 
     res.status(201).json({ // 发送成功响应 // 成功响应
       message: 'User registered successfully', // 响应消息 // 消息
-      user: { id: user.id, username: user.username, email: user.email }, // 返回用户信息 // 用户信息
+      user: { id: user.id, username: user.username, email: user.email, isVerified: user.isVerified },      // 返回用户信息 // 用户信息
     });
   } catch (error) { // 捕获异常 // 捕获错误
     console.error(error); // 在控制台打印错误信息 // 打印错误
@@ -42,6 +42,10 @@ exports.login = async (req, res) => { // 异步函数处理请求和响应 // �
     const user = await User.findOne({ where: { email } }); // 使用 findOne 方法查找用户 // 查找用户
     if (!user) { // 如果用户不存在 // 判断是否存在
       return res.status(401).json({ error: 'Invalid email or password' }); // 发送无效邮箱或密码响应 // 无效响应
+    }
+    // 检查用户是否完成验证
+    if (!user.isVerified) {
+      return res.status(403).json({ error: 'Account not verified. Please complete verification process.' });
     }
 
     // 验证密码 // 验证密码

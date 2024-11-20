@@ -18,7 +18,14 @@ module.exports = (sequelize, DataTypes) => { // 定义一个名为 'User' 的模
       type: DataTypes.STRING, // 设置字段不允许为空 // 不允许为空
       allowNull: false, // 结束 password 字段定义
     }, // 结束 User 模型字段定义
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    
   }); // 返回定义好的 User 模型 // 返回模型
+  
   return User; // 结束模块导出函数
 };
 
